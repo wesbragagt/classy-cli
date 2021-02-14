@@ -5,12 +5,17 @@ const {getSelectors, makeTypes, pipe} = require('./lib')
 require('colors')
 console.log("Generating types with classy-cli...".green)
 
-const [_,__,inputFile, outputFile] = process.argv
+const [_,__,inputFile, outputFile = 'classname.ts'] = process.argv
 
 const pathString = path.join(process.cwd(), inputFile)
 // console.log(pathString)
 const css = fs.readFileSync(pathString, 'utf8')
+const template = (type) => `// Generated with classy-cli
+    export type TClassname = ${type}
+    export const classy = (classes: Array<TClassname | string>) => [...new Set(classes)].filter(e => e).join(' ')
+`
+const types = pipe(
+    getSelectors, 
+    makeTypes)(css)
 
-const output = pipe(getSelectors, makeTypes('type classname = '))(css)
-
-fs.writeFileSync(path.join(process.cwd(), outputFile), output)
+fs.writeFileSync(path.join(process.cwd(), outputFile), template(types))

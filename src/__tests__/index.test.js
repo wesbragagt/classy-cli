@@ -19,7 +19,7 @@ describe('getSelectors', ()=>{
 })
 describe('makeTypes', ()=>{
     test('given an array of strings convert them to a typescript enum type', ()=>{
-        const result = makeTypes(['.xlb__button', '.xls'])('type classes = ')
-        expect(result).toEqual(`type classes = 'xlb__button' | 'xls'`)
+        const result = makeTypes(['.xlb__button', '.xls'])
+        expect(result).toEqual(`'xlb__button' | 'xls'`)
     })
 })
